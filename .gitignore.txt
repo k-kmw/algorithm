@@ -1,0 +1,4 @@
+/CMakeLists
+.idea/
+cmake-buld-debug/
+past/
