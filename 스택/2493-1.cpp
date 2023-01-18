@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <stack>
 using namespace std;
 
@@ -9,6 +8,16 @@ int main() {
 
     int n;
     cin >> n;
-    stack<int> s;
+    stack<pair<int, int>> s;
+    s.push({100000001, 0});
+    for(int i=1; i<=n; i++) {
+        int height;
+        cin >> height;
+        while(s.top().first < height) {
+            s.pop();
+        }
+        cout << s.top().second << ' ';
+        s.push({height, i});
+    }
 
 }
