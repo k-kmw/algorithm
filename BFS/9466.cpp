@@ -2,7 +2,7 @@
 using namespace std;
 
 int board[100002];
-bool vis[100002];
+int state[100002];
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, 1, 0, -1};
 
@@ -37,5 +37,7 @@ int main() {
     }
 
 }
+
+// 못품
 
 
