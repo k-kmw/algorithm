@@ -15,29 +15,33 @@ int main() {
     while(t--) {
         int n;
         cin >> n;
-        int no_team = 0;
-        queue<int> q;
+        fill(state+1, state+n+1, 0);
         for(int i=1; i<=n; i++)
             cin >> board[i];
 
-        q.push(1);
-        vis[1] = true;
-        int idx = 1;
-        while(!q.empty()) {
-            int cur = q.front();
-            q.pop();
-            int nx = board[cur];
-            if(nx == cur || board[nx] == cur || vis[nx])   {
-                vis[nx] = true;
-                nx = ++idx;
+        for(int i=1; i<=n; i++) {
+            if(state[i] == 0) {
+                int cur = i;
+                while(true) {
+                    state[cur] = i;
+                    cur = board[cur];
+                    if(state[cur] == i) { // cycle이 생성되면
+                        while(state[cur] != -1) {
+                            state[cur] = -1;
+                            cur = board[cur];
+                        }
+                        break;
+                    }
+                    else if(state[cur] != 0)    break;
+                }
             }
-            q.push(nx);
-            vis[nx] = true;
         }
-    }
+        int cnt=0;
+        for(int i=1; i<=n; i++)
+            if(state[i] != -1)  cnt++;
 
+        cout << cnt << '\n';
+    }
 }
 
-// 못품
-
-
+// 답 보고 품
