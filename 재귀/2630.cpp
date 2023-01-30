@@ -1,11 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+int board[130][130];
+int result[2];
 int N;
-int board[2200][2200];
-int result[3];
 
-bool check(int x, int y, int n) { // 같은지 체크
+bool check(int x, int y, int n) { // 같은지 확인 하는 함수
     for(int i=x; i<x+n; i++) {
         for(int j=y; j<y+n; j++) {
             if(board[x][y] != board[i][j]) {
@@ -18,15 +17,13 @@ bool check(int x, int y, int n) { // 같은지 체크
 
 void divide(int x, int y, int n) {
     if(check(x, y, n)) {
-        result[board[x][y]+1]++;
+        result[board[x][y]]++;
     }
     else {
-        int size = n / 3;
-        for(int i=0; i<3; i++) {
-            for(int j=0; j<3; j++) {
-                divide(x + size*i, y+size*j, size);
-            }
-        }
+        int size = n / 2;
+        for(int i=0; i<2; i++)
+            for(int j=0; j<2; j++)
+                divide(x+i*size, y+j*size, size);
     }
 }
 
@@ -40,7 +37,6 @@ int main() {
             cin >> board[i][j];
 
     divide(0, 0, N);
-    for(auto r : result) {
-        cout << r << '\n';
-    }
+    for(auto res:result)
+        cout << res << '\n';
 }
