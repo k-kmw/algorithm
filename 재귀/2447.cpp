@@ -2,12 +2,13 @@
 using namespace std;
 
 void star(int i, int j, int n) {
-    if(i%3 == 1 && j%3 == 1)
+    if((i/n)%3 == 1 && (j/n)%3 == 1) {
         cout << ' ';
-    else if((i/3)%3 == 1 && (j/3)%3 == 1)
-        cout << ' ';
-    else
+    }
+    else if(n/3 == 0)
         cout << '*';
+    else
+        star(i, j, n/3);
 }
 
 int main() {
@@ -23,3 +24,5 @@ int main() {
         cout << '\n';
     }
 }
+
+// 답지 보고 품
