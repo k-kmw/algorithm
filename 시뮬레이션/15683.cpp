@@ -2,39 +2,344 @@
 using namespace std;
 int n, m;
 int board[10][10];
-int tmp[10][10];
-int mn = 64;
+int area = 100;
+int dx[] = {-1, 0,0, 1};
+int dy[] = {0, -1, 1, 0};
 
-void move() {
-    for(int a=0; a<n; a++) {
-        for(int b=0; b<m; b++)
-            board[a][b] = tmp[a][b];
+void dfs(int k) {
+    if(k == n*m) {
+        int cnt=0;
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                cout << board[i][j] << ' ';
+                if(board[i][j] == 0)
+                    cnt++;
+            }
+            cout << '\n';
+        }
+        area = min(area, cnt);
+        return;
     }
-}
 
-int check() {
-    int cnt=0;
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<m; j++) {
-            if(tmp[i][j] == 0)
-                cnt ++;
+    int x = k/m;
+    int y = k%m;
+    if(board[x][y] == 0 || board[x][y] == 6 || board[x][y] == 7) {
+        dfs(k+1);
+        return;
+    }
+    else if(board[x][y] == 1) {
+        for(int dir=0; dir<4; dir++) {
+            int nx = x + dx[dir];
+            int ny = y + dy[dir];
+            while(nx >= 0 && nx < n && ny >= 0 && ny < m && board[nx][ny] != 6 ) {
+                if(!board[nx][ny]) {
+                    board[nx][ny] = 7;
+                }
+                nx += dx[dir];
+                ny += dy[dir];
+            }
+            dfs(k+1);
+            nx = x + dx[dir];
+            ny = y + dy[dir];
+            while(nx >= 0 && nx < n && ny >= 0 && ny < m && board[nx][ny] != 6 ) {
+                if(board[nx][ny] == 7) {
+                    board[nx][ny] = 0;
+                }
+                nx += dx[dir];
+                ny += dy[dir];
+            }
         }
     }
-    for(int a=0; a<n; a++) {
-        for(int b=0; b<m; b++)
-            tmp[a][b] = board[a][b];
-    }
-    cout << cnt << '\n';
-    return cnt;
-}
 
-
-void print() {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            cout << tmp[i][j] << ' ';
+    else if(board[x][y] == 2) {
+        // 위아래
+        int nx = x - 1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx--;
         }
-        cout << '\n';
+
+        nx = x + 1;
+        while(nx < n && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx++;
+        }
+        dfs(k+1);
+
+        nx = x - 1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx--;
+        }
+
+        nx = x + 1;
+        while(nx < n && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx++;
+        }
+
+        // 좌우
+        int ny = y - 1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny--;
+        }
+
+        ny = y + 1;
+        while(ny < m && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny++;
+        }
+        dfs(k+1);
+
+        ny = y - 1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny--;
+        }
+
+        ny = y + 1;
+        while(ny < m && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny++;
+        }
+    }
+
+    else if(board[x][y] == 3) {
+        // 위
+        int nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx--;
+        }
+
+        // 오른쪽
+        int ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny++;
+        }
+        dfs(k+1);
+
+        ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny++;
+        }
+
+        // 왼쪽
+        ny = y-1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny--;
+        }
+        dfs(k+1);
+
+        ny = y-1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny--;
+        }
+
+        nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx--;
+        }
+
+        // 아래
+        nx = x+1;
+        while(nx < n && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx++;
+        }
+
+        // 오른쪽
+        ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny++;
+        }
+        dfs(k+1);
+
+        ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny++;
+        }
+
+        // 왼쪽
+        ny = y-1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny--;
+        }
+        dfs(k+1);
+
+        ny = y-1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny--;
+        }
+
+        nx = x+1;
+        while(nx < n && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx++;
+        }
+    }
+
+    else if(board[x][y] == 4) {
+        // 위
+        int nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx--;
+        }
+        // 좌
+        int ny = y-1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny--;
+        }
+        // 우
+        ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny++;
+        }
+        dfs(k+1);
+
+        // 위 원복
+        nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx--;
+        }
+
+        // 아래
+        nx = x+1;
+        while(nx < n && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx++;
+        }
+        dfs(k+1);
+
+        // 우 원복
+        ny = y + 1;
+        while(ny < m && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny++;
+        }
+
+        // 위
+        nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx--;
+        }
+        dfs(k+1);
+
+        // 좌 원복
+        ny = y - 1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny--;
+        }
+
+        // 우
+        ny = y + 1;
+        while(ny < m && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny++;
+        }
+        dfs(k+1);
+
+        // 아래 원복
+        nx = x+1;
+        while(nx < n && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx++;
+        }
+
+        // 우 원복
+        ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(board[x][ny] == 7)
+                board[x][ny] = 0;
+            ny++;
+        }
+
+        // 위 원복
+        nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(board[nx][y] == 7)
+                board[nx][y] = 0;
+            nx--;
+        }
+    }
+
+    else {
+        // 위
+        int nx = x-1;
+        while(nx >= 0 && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx--;
+        }
+        // 좌
+        int ny = y-1;
+        while(ny >= 0 && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny--;
+        }
+        // 우
+        ny = y+1;
+        while(ny < m && board[x][ny] != 6) {
+            if(!board[x][ny])
+                board[x][ny] = 7;
+            ny++;
+        }
+        // 아래
+        nx = x+1;
+        while(nx < n && board[nx][y] != 6) {
+            if(!board[nx][y])
+                board[nx][y] = 7;
+            nx++;
+        }
+        dfs(k+1);
+
     }
 }
 
@@ -42,70 +347,11 @@ int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
     cin >> n >> m;
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<m; j++) {
+    for(int i=0; i<n; i++)
+        for(int j=0; j<m; j++)
             cin >> board[i][j];
-            tmp[i][j] = board[i][j];
-        }
-    }
 
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<m; j++) {
-            int cnt;
-            if(board[i][j] == 1) {
-                int st = j; // 우측
-                for(int a = st+1; a<m; a++) {
-                    if(tmp[i][a] == 6)    break;
-                    tmp[i][a] = 7;
-                }
-                cnt = check();
-                mn = min(mn, cnt);
-
-                // 좌측
-                for(int a = st-1; a>=0; a--) {
-                    if (tmp[i][a] == 6) break;
-                    tmp[i][a] = 7;
-                }
-                cnt = check();
-                mn = min(mn, cnt);
-
-                // 위쪽
-                st = i;
-                for(int a = st-1; a>=0; a--) {
-                    if (tmp[a][j] == 6) break;
-                    tmp[a][j] = 7;
-                }
-                cnt = check();
-                mn = min(mn, cnt);
-
-                // 아래
-                for(int a = st+1; a<n; a++) {
-                    if (tmp[a][j] == 6) break;
-                    tmp[a][j] = 7;
-                }
-                cnt = check();
-                mn = min(mn, cnt);
-
-
-            }
-
-            if(board[i][j] == 2) {
-                int st = j;
-                // 우
-                for(int a=st; a<m; a++) {
-                    if(tmp[i][a] == 6)  break;
-                    tmp[i][a] = 7;
-                }
-                cnt =
-                // 좌
-                for(int a=st; a<m; a++) {
-                    if(tmp[i][a] == 6)  break;
-                    tmp[i][a] = 7;
-                }
-        }
-
-        }
-    }
-
+    dfs(0);
+    cout << area;
 }
 

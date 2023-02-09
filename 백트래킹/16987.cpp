@@ -7,65 +7,46 @@ int cnt;
 int ans;
 bool isBroken[10];
 vector<pair<int, int>> vec;
-vector<pair<int, int>> vec2;
-
-bool isEnd() {
-    int count = 0;
-    for(int i=0; i<n; i++) {
-        if(!isBroken[i])
-            count++;
-    }
-    if(count <= 1)  return true;
-    return false;
-}
 
 void func(int k) {
-    if(k == n || isEnd()) {
-//        cout << "tst" << '\n';
-//        for(int i=0; i<n; i++)
-//            vec2[i] = vec[i];
-//        fill(isBroken, isBroken+10, 0);
-//        cout << cnt << '\n';
+    if(k == n) {
         ans = max(ans, cnt);
-//        cnt = 0;
         return;
     }
 
-    if(isBroken[k]) {
+    if(isBroken[k] || cnt == n-1) { // 현재 계란이 깨졌거나, 남은 계란이 하나이면 다음으로 진행
         func(k+1);
         return;
     }
 
     for(int i=0; i<n; i++) {
-        if(k == i)  continue;
-//        cout << i << ' ' << isBroken[i] << ' ';
-        if(!isBroken[i]) {
-            vec2[k].duration -= vec2[i].weight;
-            vec2[i].duration -= vec2[k].weight;
-            if(vec2[i].duration < 0) {
+        if(i == k)  continue; // 자기 자신이면
+        if(!isBroken[i]) { // 계란이 깨지지 않았으면
+            vec[k].duration -= vec[i].weight;
+            vec[i].duration -= vec[k].weight;
+            if(vec[i].duration <= 0) { // i번째 계란이 깨지면
                 cnt++;
                 isBroken[i] = true;
             }
-            if(vec2[k].duration < 0) {
+            if(vec[k].duration <= 0) { // 현재 계란이 깨지면
                 cnt++;
                 isBroken[k] = true;
             }
 //            cout << k << ' ' << i << ' ' << cnt << '\n';
-            func(k+1);
-            if(vec2[i].duration < 0) {
+            func(k+1); // 다음으로 진행
+            if(vec[i].duration <= 0) { // 아래부터는 과정이 진행된후 원래 상태로 돌려줌
                 cnt--;
+                isBroken[i] = false;
             }
-            if(vec2[k].duration < 0) {
+            if(vec[k].duration <= 0) {
                 cnt--;
+                isBroken[k] = false;
             }
-            vec2[i].duration += vec2[k].weight;
-            vec2[k].duration += vec2[i].weight;
-            isBroken[i] = false;
-            isBroken[k] = false;
+            vec[i].duration += vec[k].weight;
+            vec[k].duration += vec[i].weight;
         }
     }
 }
-
 
 int main() {
     ios::sync_with_stdio(0);
@@ -76,9 +57,8 @@ int main() {
         int x, y;
         cin >> x >> y;
         vec.emplace_back(x, y);
-        vec2.emplace_back(x, y);
     }
     func(0);
     cout << ans;
 }
-
+// 트리 한 번 더 그려보기
