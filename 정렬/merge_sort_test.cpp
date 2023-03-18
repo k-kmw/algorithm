@@ -11,10 +11,10 @@ void merge(int st, int en){
     int idx1 = st;
     int idx2 = mid;
     for(int i=st; i<en; i++) {
-        if(idx1 == mid)   tmp[i] = arr[idx2++];
-        else if(idx2 == en) tmp[i] = arr[idx1++];
-        else if(arr[idx1] <= arr[idx2]) tmp[i] = arr[idx1++];
-        else tmp[i] = arr[idx2++];
+        if(idx1 == mid)   tmp[i] = arr[idx2++]; // 왼쪽 원소를 모두 옮겼으면, 즉 오른쪽 원소만 남았을 경우
+        else if(idx2 == en) tmp[i] = arr[idx1++]; // 오른쪽 원소를 모두 옮겼으면, 즉 왼쪽 원소만 남았을 경우
+        else if(arr[idx1] <= arr[idx2]) tmp[i] = arr[idx1++]; // 작은걸 먼저 넣음. 배열의 왼쪽 원소가 더 작은 경우
+        else tmp[i] = arr[idx2++]; // 작은걸 먼저 넣음. 배열의 오른쪽 원소가 더 작은 경우
     }
     for(int i=st; i<en; i++) {
         arr[i] = tmp[i];
