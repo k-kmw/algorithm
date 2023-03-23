@@ -13,13 +13,13 @@ int main(void) {
         cin >> num[i];
 
     for(int i=1; i<=n; i++) {
-        dp[i][i] = 1;
+        dp[i][i] = 1; // gap 0
         if(i != 1 && num[i-1] == num[i]) {
-            dp[i-1][i] = 1;
+            dp[i-1][i] = 1; // gap 1
         }
     }
 
-    for(int i=2; i<=n; i++) {
+    for(int i=2; i<=n; i++) { // gap 2부터
         for(int j=1; i+j <= n; j++) {
             if(num[j] == num[i+j] && dp[j+1][i+j-1])
                 dp[j][i+j] = 1;
