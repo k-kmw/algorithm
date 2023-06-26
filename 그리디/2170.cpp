@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-pair<int, int> dots[1000001];
+pair<long long, long long> dots[1000001];
 #define X first
 #define Y second
 
@@ -14,20 +14,47 @@ int main() {
         cin >> dots[i].X >> dots[i].Y;
     sort(dots, dots+n);
 
-    int x = dots[0].X;
-    int y = dots[0].Y;
-    int ans = 0;
-    for(int i=1; i<n; i++) {
-        int ny = y;
-        if(dots[i].X < y && dots[i].Y > y) {
-            ny = dots[i].Y;
+    long long ans = 0;
+    long long x = dots[0].X;
+    long long y = dots[0].Y;
+    for(int i=0; i<n; i++) {
+        // 한 선의 시작점이 다른 선에 포함 되는 경우
+        if(dots[i].X <= y) {
+            if(dots[i].Y > y) {
+                y = dots[i].Y;
+            }
         }
-        if(ny == y) {
-            ans += abs(ny) - abs(x);
+        // 새로운 시작점의 경우
+        else if(dots[i].X > y){
+            if(x >= 0 && y >= 0) {
+                ans += y - x;
+            }
+            else if(x <= 0 && y >= 0) {
+                ans += y - x;
+            }
+            else if(x <= 0) {
+                ans += abs(x) - abs(y);
+            }
+            x = dots[i].X;
+            y = dots[i].Y;
         }
-        if(i==n-1 && dots[i].X > x) {
-            ans += abs(dots[i].Y) - abs(dots[i].X);
+        if(i == n-1) { // 마지막 선 처리
+            if(x >= 0 && y >= 0) {
+                ans += y - x;
+            }
+            else if(x <= 0 && y >= 0) {
+                ans += y - x;
+            }
+            else if(x <= 0) {
+                ans += abs(x) - abs(y);
+            }
+            break;
         }
+        // 한 선이 다른 선에 포함 되는 경우
+        if(dots[i].X <= y && dots[i].Y <= y) {
+            continue;
+        }
+
     }
     cout << ans;
 }

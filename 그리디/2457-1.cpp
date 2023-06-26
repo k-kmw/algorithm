@@ -37,7 +37,6 @@ int main(){
 //            cout << st << ' ' << en << '\n';
                 ans++;
             }
-            else if(i != n-1)  continue; // 그 외의 경우 다음 꽃으로 넘어감
         }
         else{ // 피는 시간이 현재 st와 en 사이가 아니면 지금까지 저장된 tmpX와 tmpY를 st와 en에 갱신
             st = tmpX;
