@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 string board[51];
-bool vis[51][51];
 int dx[] = {1, 0};
 int dy[] = { 0, 1};
 int n;
@@ -11,7 +10,7 @@ void calculate() {
 //    cout << "======================\n";
     for(int i=0; i<n; i++) {
         int tmp = 1;
-        for(int j=0; j<n-1; j++){
+        for(int j=0; j<n; j++){
             if(board[i][j] == board[i][j+1]) {
                 tmp += 1;
             }
@@ -20,13 +19,13 @@ void calculate() {
                 ans = max(ans, tmp);
                 tmp = 1;
             }
-            ans = max(ans, tmp);
+//            ans = max(ans, tmp);
         }
 //        cout << '\n';
     }
     for(int j=0; j<n; j++) {
         int tmp = 1;
-        for(int i=0; i<n-1; i++){
+        for(int i=0; i<n; i++){
             if(board[i][j] == board[i+1][j]) {
                 tmp += 1;
             }
@@ -37,7 +36,7 @@ void calculate() {
             }
         }
 //        cout << '\n';
-        ans = max(ans, tmp);
+//        ans = max(ans, tmp);
     }
 }
 
@@ -46,13 +45,15 @@ void solve(int y, int x) {
         int nx = x + dx[dir];
         int ny = y + dy[dir];
         if(nx < 0 || ny < 0 || nx >=n || ny >= n) continue;
-        if(vis[ny][nx] || board[y][x] == board[ny][nx]) continue;
-        char tmp = board[y][x];
-        board[y][x] = board[ny][nx];
-        board[ny][nx] = tmp;
+        if(board[y][x] == board[ny][nx]) continue;
+//        char tmp = board[y][x];
+//        board[y][x] = board[ny][nx];
+//        board[ny][nx] = tmp;
+        swap(board[ny][nx], board[y][x]);
         calculate();
-        board[ny][nx] = board[y][x];
-        board[y][x] = tmp;
+        swap(board[ny][nx], board[y][x]);
+//        board[ny][nx] = board[y][x];
+//        board[y][x] = tmp;
     }
 }
 

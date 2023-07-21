@@ -83,17 +83,15 @@ void solve(int y, int x) {
         int ny = y + dy[dir];
         if(nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
         if(board[y][x] == board[ny][nx]) continue;
-        else {
-            bool isSameRow = false;
-            if(ny == y) isSameRow = true;
-            char tmp = board[y][x];
-            board[y][x] = board[ny][nx];
-            board[ny][nx] = tmp;
-            if(isSameRow) calculate(isSameRow, x, nx);
-            else calculate(isSameRow, y, ny);
-            board[ny][nx] = board[y][x];
-            board[y][x] = tmp;
-        }
+        bool isSameRow = false;
+        if(ny == y) isSameRow = true;
+        char tmp = board[y][x];
+        board[y][x] = board[ny][nx];
+        board[ny][nx] = tmp;
+        if(isSameRow) calculate(isSameRow, x, nx);
+        else calculate(isSameRow, y, ny);
+        board[ny][nx] = board[y][x];
+        board[y][x] = tmp;
     }
 }
 
@@ -112,3 +110,4 @@ int main() {
     cout << mx;
 
 }
+// 처음 생각나는대로 풀다가 못풀었음... 쉽게 바꿔서 생각하자..!
