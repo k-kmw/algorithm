@@ -5,11 +5,8 @@ int n;
 int ans = 5000;
 int cnt;
 int sugar[2] = {5, 3};
-int count1;
 
 void bag(int k) {
-    count1++;
-//    cout << tot << '\n';
     if(tot > n) return;
     if(tot == n) {
         ans = min(ans, cnt);
@@ -38,7 +35,6 @@ int main() {
         cout << ans;
 
     cout << '\n';
-    cout << count1;
 }
 
 // 상한을 정하자면 대략 2^1666 (5000 / 3 ~= 1666)
