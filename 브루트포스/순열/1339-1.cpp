@@ -1,5 +1,4 @@
- #include <bits/stdc++.h>
-//#include <vector>
+#include<bits/stdc++.h>
 using namespace std;
 
 // 단어 수학 문제는 N개의 단어로 이루어 짐
@@ -7,127 +6,72 @@ using namespace std;
 // 각 알파벳 대문자를 0~9 숫자 중 하나로 바꿔서 N개의 수를 합하는 문제
 // 같은 알파벳은 같은 숫자로 바꿔야 함
 // N개의 단어가 주어졌을 때 합을 최대로 만드는 프로그램 작성
+int n;
+vector<string> words;
+set<char> filter;
+string alphabet;
+//int converts[30];
+map<char, int> converts;
+bool vis[10];
+long long mx = 0;
+long long powCache[10];
 
- struct Character
- {
-     char ch;
-     int cnt;
- };
+long long update() {
+    long long tot = 0;
+    // 각 words들의 문자열을 숫자로 변환
+    // 모두 더함
+    for(int i=0; i<words.size(); i++) {
+        long long num = 0;
+        for(int j=0; j<words[i].size(); j++) {
+            num += converts[words[i][j]] * powCache[words[i].size()-j-1]; // AAA -> 9*10^2, pow(10, n) 함수의 시간복잡도 = O(n)
+        }
+//        cout << num << '\n';
+        tot += num;
+    }
+    return tot;
+}
 
- class Descending
- {
- public:
-     bool operator()(const Character &a, const Character &b)
-     {
-         return a.cnt > b.cnt;
-     }
- };
+void dfs(int k) {
+    if(k == alphabet.size()) {
+        mx = max(mx, update());
+        return;
+    }
+    // ABCDEFG
+    // A -> 9, B -> 8 ...
+    for(int i=9; i>int(9-alphabet.size()); i--) {
+        if(vis[i])  continue;
+        converts[alphabet[k]] = i;
+        vis[i] = true;
+        dfs(k+1);
+        vis[i] = false;
+    }
+}
 
- class Converter
- {
- public:
-     Converter(int maxLevel) : maxLevel(maxLevel)
-     {
-         chars = vector<vector<Character>>(maxLevel);
-     };
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
 
-     void set(string word, vector<int> &cnt)
-     {
-         // ABCDE => maxLevel = 5,
-         // GDF => G는 레벨이 2이어야 함
-         for (int l = 0; l < word.length(); l++)
-         {
-             int level = maxLevel - word.length() + l;
-             char ch = word.at(l);
-             chars[level].push_back({ch, cnt[ch - 'A']}); // l -> ch
-         }
-     }
-
-     long long convert()
-     {
-         int curNum = 9;
-         long long sum = 0;
-         vector<int> convert = vector<int>(26, -1);
-
-         for (int l = 0; l < chars.size(); l++)
-         {
-             sort(chars[l].begin(), chars[l].end(), Descending());
-             for (Character ch : chars[l])
-             {
-//                 cout << ch.ch << '\n';
-                 long long power = pow(10, chars.size() - l - 1);
-                 if (convert[ch.ch - 'A'] > -1)
-                 {
-//                     cout << ch.ch << ' ' << convert[ch.ch - 'A'] * power << '\n';
-                     sum += convert[ch.ch - 'A'] * power;
-                 }
-                 else
-                 {
-                     convert[ch.ch - 'A'] = curNum;
-//                     cout << ch.ch << ' ' << convert[ch.ch - 'A'] * power << '\n';
-                     sum += curNum * power;
-                     curNum--;
-                 }
-             }
-         }
-
-         return sum;
-     }
-
- private:
-     vector<vector<Character>> chars;
-     int maxLevel;
- };
-
- int main()
- {
-     ios::sync_with_stdio(0);
-     cin.tie(0);
-
-     int n;
-     cin >> n;
-
-     vector<string> words;
-     vector<int> cnt(26, 0);
-     int maxLen = 0;
-     for (int i = 0; i < n; i++)
-     {
-         string s;
-         cin >> s;
-         words.push_back(s);
-         maxLen = max<int>(maxLen, s.length());
-         for (char ch : s)
-         {
-             cnt[ch - 'A'] += 1;
-         }
-     }
-
-     Converter converter(maxLen);
-     for (auto word : words)
-     {
-         converter.set(word, cnt);
-     }
-
-     cout << converter.convert() << '\n';
-
-     // 1. 단어를 모두 받는다
-     // 2. 레벨 별 순회?
-     // 2-1. 레벨 나타내는 인덱스를 두고, 각 문자열 순회
-     // 2-2. map에 있는지 확인하고 있으면 사용, 없으면 값 넣기
-     // 2-3. 길이가 끝났으면 pass. 모든 문자열이 끝날때 까지 반복
-     // 3. 레벨 순서대로 숫자 부여
- }
-
- //10
- //ABB
- //BB
- //BB
- //BB
- //BB
- //BB
- //BB
- //BB
- //BB
- //BB
- //정답값 : 1790
- //출력값 : 1780
+    // 1. n개의 단어를 입력 받는다.
+    // 2. 단어의 문자들을 set에 넣고 중복을 제거한다
+    // 3. 백트래킹으로 set에 있는 모든 문자들을 9~집합 사이즈까지 대응시킨다
+    // 4. 각 대응마다 단어들을 숫자로 변환시킨 후 모두 더한다
+    // 5. 최대값을 갱신한다
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        string s;
+        cin >> s;
+        words.push_back(s);
+        for(auto c : s) {
+            filter.insert(c);
+        }
+    }
+    for(auto &f : filter) {
+        alphabet += f;
+    }
+    powCache[0] = 1;
+    for(int i=1; i<10; i++) {
+        powCache[i] = powCache[i-1] * 10;
+    }
+    dfs(0);
+    cout << mx << '\n';
+}
