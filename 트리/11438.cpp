@@ -24,7 +24,7 @@ int main() {
     cin >> n;
 
     // 1. adj배열 채우고, 트리 만들기
-    for(int i=0; i<n; i++) {
+    for(int i=0; i<n-1; i++) {
         int u, v;
         cin >> u >> v;
         u--;
