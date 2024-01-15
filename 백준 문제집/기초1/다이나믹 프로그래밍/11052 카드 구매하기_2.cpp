@@ -8,10 +8,6 @@ int mx;
 
 void dfs(int st) {
     if(tmp == n) {
-//        for (const auto &v: vec) {
-//            cout << v << ' ';
-//        }
-//        cout << '\n';
         int sum = 0;
         for (const auto &v: vec) {
             sum += p[v];
