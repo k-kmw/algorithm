@@ -10,15 +10,18 @@ int main() {
     cin >> n;
 
     d[2] = 3;
-    d[4] = 11;
-    for(int i=5; i<=n; i++) {
+    for(int i=4; i<=n; i++) {
         if(i % 2 != 0) {
             d[i] = 0;
         }
         else {
-            d[i] = d[i-4] * d[i-2];
+            d[i] = d[2] * d[i-2];
+            for(int j=i-4; j>=2; j-=2) {
+                d[i] += d[j] * 2;
+            }
+            d[i] += 2;
         }
     }
     cout << d[n] << '\n';
 }
-// 다시 풀기.
+// 풀이 보고 품..
