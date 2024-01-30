@@ -6,23 +6,20 @@ int ans[10];
 bool isused[10];
 
 void dfs(int k) {
-
-    if(k == m) {
-        for(int i=0; i<m; i++) {
+    if (k == m) {
+        for (int i = 0; i < m; i++) {
             cout << ans[i] << ' ';
         }
         cout << '\n';
         return;
     }
-
     int prior = 0;
-    for(int i=0; i<n; i++) {
-        if(isused[i])    continue;
-        if(prior == a[i])   continue;
+    for (int i = 0; i < n; i++) {
+        if (a[i] == prior || isused[i])	continue;
         ans[k] = a[i];
-        prior = ans[k];
+        prior = a[i];
         isused[i] = true;
-        dfs(k+1);
+        dfs(k + 1);
         isused[i] = false;
     }
 }

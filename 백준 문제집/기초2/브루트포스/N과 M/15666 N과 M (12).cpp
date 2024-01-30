@@ -17,7 +17,7 @@ void dfs(int k, int st) {
         if (a[i] == prior)	continue;
         ans[k] = a[i];
         prior = a[i];
-        dfs(k + 1, i+1);
+        dfs(k + 1, i);
     }
 }
 

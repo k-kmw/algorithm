@@ -4,7 +4,7 @@ int n, m;
 int a[10];
 int ans[10];
 
-void dfs(int k, int st) {
+void dfs(int k) {
     if (k == m) {
         for (int i = 0; i < m; i++) {
             cout << ans[i] << ' ';
@@ -13,11 +13,11 @@ void dfs(int k, int st) {
         return;
     }
     int prior = 0;
-    for (int i = st; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (a[i] == prior)	continue;
         ans[k] = a[i];
         prior = a[i];
-        dfs(k + 1, i+1);
+        dfs(k + 1);
     }
 }
 
@@ -30,5 +30,5 @@ int main() {
         cin >> a[i];
     }
     sort(a, a + n);
-    dfs(0, 0);
+    dfs(0);
 }
