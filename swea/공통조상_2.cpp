@@ -78,8 +78,8 @@ int main(int argc, char** argv)
                     v2 = parent[v2][j];
                 }
             }
+            v1 = parent[v1][0];
         }
-        v1 = parent[v1][0];
         dfs(v1);
         cout << '#' << test_case << ' ' << v1+1 << ' ' << cnt << '\n';
     }
