@@ -66,34 +66,45 @@ void destroy() {
         for(int j=0; j<w; j++) {
             for(int i=h-1; i>=0; i--) {
                 if(boardCopy[i][j] != 0) {
-                    int k = i + 1;
-                    while(k < h && boardCopy[k][j] == 0) {
-                        k++;
+                    int diff = 0;
+                    for(int k=i+1; k<h; k++) {
+                        if(boardCopy[k][j] == 0) {
+                            diff++;
+                        } else {
+                            break;
+                        }
                     }
-                    if (k - 1 != i) {
-                        boardCopy[k - 1][j] = boardCopy[i][j];
+                    if(boardCopy[i+diff][j] == 0) {
+                        boardCopy[i+diff][j] = boardCopy[i][j];
                         boardCopy[i][j] = 0;
                     }
                 }
             }
         }
-
-//    if(pos[0] == 2 && pos[1] == 2 && pos[2] == 6) {
-//        for(auto& p : pos) {
-//            cout << p << ' ';
+//        if(pos[0] == 2 && pos[1] == 2 && pos[2] == 6) {
+//            for(auto& p : pos) {
+//                cout << p << ' ';
+//            }
+//            cout << '\n';
+//            for(int i=0; i<h; i++) {
+//                for(int j=0; j<w; j++) {
+//                    cout << boardCopy[i][j] << ' ';
+//                }
+//                cout << '\n';
+//            }
+//            cout << '\n';
 //        }
-//        cout << '\n';
+//
+//    }
+
         int tmp = 0;
         for(int i=0; i<h; i++) {
             for(int j=0; j<w; j++) {
-//                cout << boardCopy[i][j] << ' ';
                 if(boardCopy[i][j] != 0) {
                     tmp++;
                 }
             }
-//            cout << '\n';
         }
-//        cout << '\n';
         mn = min(mn, tmp);
     }
 }
