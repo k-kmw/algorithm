@@ -2,6 +2,9 @@
 using namespace std;
 
 bool vis[100001];
+int mn = 100001;
+int dist[100001];
+
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
@@ -9,29 +12,32 @@ int main() {
     int n, k;
     cin >> n >> k;
 
-    queue<pair<int, int>> q; // 위치, 시간
-    q.push({n, 0});
+    queue< pair<int, int> > q; // 좌표, 시간
+    q.push(make_pair(n, 0));
     vis[n] = true;
     while(!q.empty()) {
         auto cur = q.front();
         q.pop();
-        if(cur.first == k) {
-            cout << cur.second << '\n';
+        int x = cur.first;
+        int t = cur.second;
+
+        if(x == k) {
+            cout << t << '\n';
             break;
         }
-        for(int nx : {cur.first+1, cur.first-1, cur.first*2}) {
-            if(nx < 0 || nx > 100000)   continue;
-            if(vis[nx]) continue;
-            if(nx == cur.first*2) {
-                q.push({nx, cur.second});
-            } else {
-                q.push({nx, cur.second+1});
-            }
-            if(nx == k) {
-                cout << cur.second + 1 << '\n';
-                return 0;
-            }
-            vis[nx] = true;
+        if(2*x <= 100000 && !vis[2*x]) { // 2*x 먼저 큐에 넣어야 최소 시간이 됨
+            q.push((make_pair(2*x, t)));
+            vis[2*x] = true;
+        }
+
+        if(x-1 >= 0 && !vis[x-1]) {
+            q.push(make_pair(x-1, t+1));
+            vis[x-1] = true;
+        }
+
+        if(x+1 <= 100000 && !vis[x+1]) {
+            q.push((make_pair(x+1, t+1)));
+            vis[x+1] = true;
         }
     }
 }
