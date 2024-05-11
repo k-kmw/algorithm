@@ -3,7 +3,6 @@ using namespace std;
 
 int n, m;
 char board[25][25];
-bool vis[2][25][25];
 int dy[] = {-1, 0, 1, 0};
 int dx[] = {0, -1, 0, 1};
 vector<pair<int, int>> coins;
@@ -18,25 +17,23 @@ void dfs(int k, int y, int x, int yy, int xx) {
     if(k >= 11) {
         return;
     }
+
     for(int dir=0; dir<4; dir++) {
         int ny = y + dy[dir];
         int nx = x + dx[dir];
         int nyy = yy + dy[dir];
         int nxx = xx + dx[dir];
 
-//        cout << ny << ' ' << nx << '\n';
-//        cout << nyy << ' ' << nxx << '\n';
-
         if(isOut(ny, nx) && isOut(nyy, nxx)) {
             continue;
         }
         if(isOut(ny, nx) && !isOut(nyy, nxx)) {
             ans = min(ans, k);
-            return;
+            break;
         }
         if(!isOut(ny, nx) && isOut(nyy, nxx)) {
             ans = min(ans, k);
-            return;
+            break;
         }
         if(board[ny][nx] == '#') {
             ny = y;
@@ -46,6 +43,7 @@ void dfs(int k, int y, int x, int yy, int xx) {
             nyy = yy;
             nxx = xx;
         }
+        if(ny == y && nx == x && nyy == yy && nxx == xx) continue;
         dfs(k+1, ny, nx, nyy, nxx);
     }
 }
