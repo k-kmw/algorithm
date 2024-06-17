@@ -18,12 +18,12 @@ int main() {
         }
     }
     queue< pair< pair<int, int>, pair<int, int> > > q;
-    q.push(make_pair(make_pair(0, 0), make_pair(0, 1)));
-    vis[0][0][1] = true;
+    q.push(make_pair(make_pair(0, 0), make_pair(0, 1))); // 초기 좌표, 벽 부순 횟수, 이동한 칸 수
+    vis[0][0][0] = true;
     while(!q.empty()) {
         auto cur = q.front();
         q.pop();
-        cout << cur.first.first << ' ' << cur.first.second << '\n';
+//        cout << cur.first.first << ' ' << cur.first.second << ' ' << cur.second.first << '\n';
         int brokenCnt = cur.second.first;
         int cnt = cur.second.second;
         if(cur.first.first == n-1 && cur.first.second == m-1) {
@@ -34,10 +34,10 @@ int main() {
             int ny = cur.first.first + dy[dir];
             int nx = cur.first.second + dx[dir];
             if(ny < 0 || ny >= n || nx < 0 || nx >= m) continue;
-            if(board[ny][nx] == '1' && brokenCnt < k && !vis[ny][nx][brokenCnt+1]) {
+            if(board[ny][nx] == '1' && brokenCnt+1 <= k && !vis[ny][nx][brokenCnt+1]) {
                 q.push((make_pair(make_pair(ny, nx), make_pair(brokenCnt+1, cnt+1))));
                 vis[ny][nx][brokenCnt+1] = true;
-            } else if(!vis[ny][nx][brokenCnt]) {
+            } else if(board[ny][nx] == '0' && !vis[ny][nx][brokenCnt]) {
                 q.push((make_pair(make_pair(ny, nx), make_pair(brokenCnt, cnt+1))));
                 vis[ny][nx][brokenCnt] = true;
             }
