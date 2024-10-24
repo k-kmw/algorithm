@@ -3,31 +3,26 @@
 using namespace std;
 
 vector<int> solution(vector<int> sequence, int k) {
-    vector<int> answer = {0, 1000000};  // 가장 큰 값으로 초기화
+    vector<int> answer = {0, 1000000};
     int n = sequence.size();
 
-    int p1 = 0, p2 = 0;
-    int sum = sequence[0];  // 첫 번째 값으로 sum 초기화
+    int p1 = 0;
+    int p2 = 0;
+    int sum = sequence[0];
 
-    while (p1 < n && p2 < n) {
-        if (sum == k) {
-            // 부분 수열의 길이가 더 짧은 경우 업데이트
-            if (p2 - p1 < answer[1] - answer[0]) {
+    while(p1 < n && p2 < n) { // p1이 p2보다 커질수 없다 (k >= 5)
+
+        if(sum == k) { // 합이 k와 같으면
+            if(answer[1] - answer[0] > p2 - p1) { // 더 짧은 수열을 선택
                 answer[0] = p1;
                 answer[1] = p2;
             }
-            // 시작 인덱스를 앞으로 이동하여 더 짧은 수열을 찾음
-            sum -= sequence[p1++];
-        } else if (sum < k) {
-            // 합이 작으면 p2를 늘려서 더 많은 원소를 포함
-            if (++p2 < n) {
-                sum += sequence[p2];
-            }
-        } else {
-            // 합이 크면 p1을 늘려서 원소를 제외
-            sum -= sequence[p1++];
+            sum -= sequence[p1++]; // 더 짧은 수열 탐색
+        } else if(sum < k) { // 합이 k보다 작으면
+            sum += sequence[++p2]; // 수열에 원소 하나 추가
+        } else if (sum > k) { // 합이 k보다 크면
+            sum -= sequence[p1++]; // 수열에 원소 하나 제거
         }
     }
-
     return answer;
 }
